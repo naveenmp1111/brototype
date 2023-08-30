@@ -1,0 +1,576 @@
+window.onload = function () {
+  render();
+};
+
+
+
+
+
+
+
+
+
+let groupInviteModal = false
+
+function closeModal(id) {
+  $("#" + id).modal("toggle");
+}
+function showModal(id) {
+  $("#" + id).modal("show");
+}
+function render() {
+  window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+    "recaptcha-container",
+    {
+      size: "invisible",
+      callback: (response) => {
+        // reCAPTCHA solved, allow signInWithPhoneNumber.
+        onSignInSubmit();
+      },
+    }
+  );
+  recaptchaVerifier.render();
+}
+const firebaseConfig = {
+  apiKey: "AIzaSyBOhQsRZ2T5gx-Fw_QtuOghnbRkmvoaO4g",
+  authDomain: "brototype-com-website.firebaseapp.com",
+  projectId: "brototype-com-website",
+  storageBucket: "brototype-com-website.appspot.com",
+  messagingSenderId: "980867911119",
+  appId: "1:980867911119:web:8ad90c6bcccf229b3056ba",
+  measurementId: "G-LES0EHMY4W"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+$("#consult-form-1").validate({
+  rules: {
+    name: {
+      required: true,
+    },
+    mobile: {
+      required: true,
+      // minlength: 10,
+      maxlength: 12,
+    },
+    email:{
+      required: true,
+      email:true,
+    },
+    employmentStatus:{
+      required:true
+    }
+  },
+  messages: {
+    mobile: {
+      minlength: "enter a valid number",
+      maxlength:"enter a valid number"
+    },
+  },
+  submitHandler: (form, e) => {
+    e.preventDefault();
+    groupInviteModal = false
+    //sumbitMobile($(form).find('input[name="mobile"]').val())
+    bodyData = $("#consult-form-1").serialize();
+    $.LoadingOverlay("show", [{}]);
+    let countryCode = $(form).find('.iti__selected-dial-code').text()
+    // if(countryCode) {
+    //   $(form).find('input[name="mobile"]').val($(form).find('input[name="mobile"]').val() + countryCode)  
+    // } 
+    $.ajax({
+      method: "POST",
+      url: "/api/v1/forms/submitForm",
+      data: $("#consult-form-1").serialize()+'&countryCode='+countryCode,
+      success: function (response) {
+        $.LoadingOverlay("hide", [{}]);
+        console.log("success");
+        console.log(form);
+        console.log(e);
+        sumbitMobile($(form).find('input[name="mobile"]').val(), countryCode);
+
+      },
+      error: function (error) {
+        $.LoadingOverlay("hide", [{}]);
+        console.log(error);
+        showModal("errorModal")
+      },
+    });
+    // console.log($('#coupon-form').serializeArray())
+    // callOtp($("#coupon-modal-contact").val());
+  },
+});
+
+$("#consult-form-2").validate({
+  rules: {
+    name: {
+      required: true,
+    },
+    mobile: {
+      required: true,
+     // minlength: 10,
+      maxlength: 12,
+    },
+    email:{
+      required: true,
+      email:true,
+    },
+    employmentStatus:{
+      required:true
+    }
+  },
+  messages: {
+    mobile: {
+      minlength: "enter a valid number",
+      maxlength:"enter a valid number"
+    },
+  },
+  submitHandler: (form, e) => {
+    $.LoadingOverlay("show", [{}]);
+    e.preventDefault();
+    let countryCode = $(form).find('.iti__selected-dial-code').text()
+    // if(countryCode) {
+    //   $(form).find('input[name="mobile"]').val($(form).find('input[name="mobile"]').val($(form).find('input[name="mobile"]').val() + countryCode) )
+    // } 
+    
+    bodyData = $("#consult-form-2").serialize()+'&countryCode='+countryCode;
+    $.ajax({
+      method: "POST",
+      url: "/api/v1/forms/submitForm",
+      data: $("#consult-form-2").serialize()+'&countryCode='+countryCode,
+      success: function (response) {
+        groupInviteModal = false
+        $.LoadingOverlay("hide", [{}]);
+        sumbitMobile($(form).find('input[name="mobile"]').val(),  countryCode);
+
+        //sumbitMobile()
+      },
+      error: function (error) {
+        $.LoadingOverlay("hide", [{}]);
+        console.log(error);
+        showModal("errorModal")
+      },
+    });
+    // console.log($('#coupon-form').serializeArray())
+    // callOtp($("#coupon-modal-contact").val());
+  },
+});
+
+let bodyData;
+$("#consult-modal-form").validate({
+  rules: {
+    name: {
+      required: true,
+    },
+    mobile: {
+      required: true,
+      // minlength: 10,
+      maxlength: 12,
+    },
+    email:{
+      required: true,
+      email:true,
+    },
+    employmentStatus:{
+      required:true
+    }
+  },
+  messages: {
+    mobile: {
+      minlength: "enter a valid number",
+      maxlength:"enter a valid number"
+    },
+  },
+  submitHandler: (form, e) => {
+    e.preventDefault();
+    groupInviteModal = false
+    let countryCode = $(form).find('.iti__selected-dial-code').text()
+    switch ($(form).find('select[name="language"]').val()) {
+      case 'Tamil':
+        $(form).find('input[name="form"]').val('showMeCareerPathModalTamil')
+        break;
+      case 'Hindi':
+        bodyData = bodyData + "&hindi="+'true';
+        $(form).find('input[name="form"]').val('showMeCareerPathModalHindi')
+        break;
+      default:
+        console.log('no language option');
+     }
+    bodyData = $("#consult-modal-form").serialize()+'&countryCode='+countryCode;
+    //sumbitMobile($(form).find('input[name="mobile"]').val())
+
+   
+   
+    // if(countryCode) {
+    //   $(form).find('input[name="mobile"]').val($(form).find('input[name="mobile"]').val() + countryCode)
+    // } 
+    $.LoadingOverlay("show", [{}]);
+    $.ajax({
+      method: "POST",
+      url: "/api/v1/forms/submitForm",
+      data: bodyData,
+      success: function (response) {
+
+        $.LoadingOverlay("hide", [{}]);
+        $("#popUpForm").modal("hide");
+        sumbitMobile($(form).find('input[name="mobile"]').val(),  countryCode);
+        //sumbitMobile()
+      },
+      error: function (error) {
+        $.LoadingOverlay("hide", [{}]);
+        console.log(error);
+        showModal("errorModal")
+        closeModal("popUpForm")
+      },
+    });
+    // console.log($('#coupon-form').serializeArray())
+    // callOtp($("#coupon-modal-contact").val());
+  },
+});
+
+$("#groupInvite-modal-form").validate({
+  rules: {
+    name: {
+      required: true,
+    },
+    mobile: {
+      required: true,
+      // minlength: 10,
+      maxlength: 12,
+    },
+    email:{
+      required: true,
+      email:true,
+    }
+  },
+  messages: {
+    mobile: {
+      minlength: "enter a valid number",
+      maxlength:"enter a valid number"
+    },
+    employmentStatus:{
+      required:true
+    }
+  },
+  submitHandler: (form, e) => {
+    e.preventDefault();
+    //sumbitMobile($(form).find('input[name="mobile"]').val())
+    $.LoadingOverlay("show", [{}]);
+    let countryCode = $(form).find('.iti__selected-dial-code').text()
+    // if(countryCode) {
+    //   $(form).find('input[name="mobile"]').val($(form).find('input[name="mobile"]').val() + countryCode)
+    // } 
+    $.ajax({
+      method: "POST",
+      url: "/api/v1/forms/submitForm",
+      data: $("#groupInvite-modal-form").serialize()+'&countryCode='+countryCode,
+      success: function (response) {
+        // console.log("success");
+        // console.log(response);
+
+       // document.getElementById("popUpGroupInvite").style.display = 'none'
+        sumbitMobile($(form).find('input[name="mobile"]').val() ,  countryCode);
+        groupInviteModal = true
+       // $("#popUpGroupInvite").modal("hide");
+        $.LoadingOverlay("hide", [{}]);
+        
+
+        //sumbitMobile()
+      },
+      error: function (error) {
+        $.LoadingOverlay("hide", [{}]);
+        console.log(error);
+        showModal("errorModal")
+      },
+    });
+    // console.log($('#coupon-form').serializeArray())
+    // callOtp($("#coupon-modal-contact").val());
+  },
+});
+
+let phone = "";
+let coderesult;
+function sumbitMobile(mobile, countryCode) {
+
+  // var adder = $('.selected-dial-code').text()
+  var adder = "+91";
+  console.log(countryCode)
+  if(countryCode) adder = countryCode
+  mobile = adder + mobile;
+  phone = mobile;
+  //phone number authentication function of firebase
+  //it takes two parameter first one is number,,,second one is recaptcha
+
+  console.log(window.recaptchaVerifier);
+  firebase
+    .auth()
+    .signInWithPhoneNumber(mobile, window.recaptchaVerifier)
+    .then(function (confirmationResult) {
+      //s is in lowercase
+      window.confirmationResult = confirmationResult;
+      coderesult = confirmationResult;
+    
+      $("#enterOtpModal").modal("show");
+      callTimer()
+      //alert("OTP has sent");
+    })
+    .catch(function (error) {
+      console.log(error);
+      alert(error);
+    });
+}
+function codeVerify(code) {
+  $.LoadingOverlay("show", [{}]);
+  coderesult
+    .confirm(code)
+    .then(function (result) {
+      var user = result.user;
+      user
+        .getIdToken()
+        .then(function (idToken) {
+          $.ajax({
+            url: "/api/v1/auth/signup",
+            data: bodyData,
+            headers: {
+              Authorization: "Bearer " + idToken,
+            },
+            method: "POST",
+            success: (response) => {
+              
+              //closeModal
+              closeModal("enterOtpModal");
+              $.LoadingOverlay("hide", [{}]);
+              
+
+            
+              setGroupModal(response.inviteGroupLink)
+             // document.getElementById("popUpGroupInvite").style.display = 'block'
+              disableOtherForm(response.name, response.mobile)
+              if(!groupInviteModal)showModal("successModal")
+
+            },
+            error: (err) => {
+              $.LoadingOverlay("hide", [{}]);
+              closeModal("enterOtpModal");
+              showModal("errorModal")
+              console.log(err.statText);
+            },
+          });
+        })
+        .catch(function (error) {
+          $.LoadingOverlay("hide", [{}]);
+          alert(error.message);
+
+          document.getElementById("error-message").style.visibility = "visible";
+        });
+    })
+    .catch((err) => {
+      $.LoadingOverlay("hide", [{}]);
+      alert(error.message);
+    });
+
+  //   location.replace('http://127.0.0.1:5500/');
+}
+
+
+
+// OTP input javascript
+        // don't add any function or variable to this script
+        function checkSixDigit() {
+
+          let sixValue = document.getElementById("first").value
+           console.log(sixValue)
+          
+          if(sixValue.length === 6 ) {
+            //  const inputs = document.querySelectorAll('#otp > *[id]');
+               const inputs =  document.getElementById('otp').getElementsByTagName('input')
+              for( let i = 0; i < inputs.length ; i++) {
+                  inputs[i].value = sixValue[i]
+                  
+              }
+              
+          }
+      }
+
+document.addEventListener("DOMContentLoaded", function (event) {
+  function OTPInput() {
+    const inputs = document.querySelectorAll("#otp > *[id]");
+    for (let i = 0; i < inputs.length; i++) {
+      inputs[i].addEventListener("keydown", function (event) {
+        if (event.key === "Backspace") {
+          inputs[i].value = "";
+          if (i !== 0) inputs[i - 1].focus();
+        } else {
+          if (i === inputs.length - 1 && inputs[i].value !== "") {
+            return true;
+          } else if (event.keyCode > 47 && event.keyCode < 58) {
+            inputs[i].value = event.key;
+            if (i !== inputs.length - 1) inputs[i + 1].focus();
+            event.preventDefault();
+          } else if (event.keyCode > 64 && event.keyCode < 91) {
+            inputs[i].value = String.fromCharCode(event.keyCode);
+            if (i !== inputs.length - 1) inputs[i + 1].focus();
+            event.preventDefault();
+          }
+        }
+      });
+    }
+  }
+  OTPInput();
+});
+
+function OTPOutput() {
+  var otpValue = "";
+  const inputs = document.querySelectorAll("#otp > *[id]");
+  for (let i = 0; i < inputs.length; i++) {
+    otpValue += inputs[i].value;
+  }
+  if (otpValue.length != 6) return console.log("less than 6");
+  codeVerify(otpValue);
+  //return $('#nameModal').modal('show')
+}
+
+function resendOTP() {
+  $.LoadingOverlay("show", [{}]);
+
+  setTimeout(() => {
+    console.log("timeout over");
+    $.LoadingOverlay("hide", [{}]);
+  }, 3500);
+  firebase
+    .auth()
+    .signInWithPhoneNumber(phone, window.recaptchaVerifier)
+    .then(function (confirmationResult) {
+      $.LoadingOverlay("hide", [{}]);
+      window.confirmationResult = confirmationResult;
+      coderesult = confirmationResult;
+
+      document.getElementById("resend-otp-btn").textContent = "OTP has send";
+      $(".resend-btn").prop("disabled", true);
+    })
+    .catch(function (error) {
+      $.LoadingOverlay("hide", [{}]);
+      oneTime = true;
+      console.log(error);
+      alert(error);
+    });
+}
+
+function callTimer() {
+  // Set the date we're counting down to
+  var currentDate = new Date();
+  var countDownDate = new Date(currentDate.getTime() + 1 * 60000).getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function () {
+    // Get today's date and time
+    var now = new Date().getTime();
+
+    // Find the distance between now and the count down date
+    var distance = countDownDate - now;
+
+    // Time calculations for days, hours, minutes and seconds
+    //var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    //var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    // Display the result in the element with id="demo"
+    document.getElementById("otp-timer").innerHTML =
+      minutes + ":" + seconds + "";
+
+    // If the count down is finished, write some text
+    if (distance < 0) {
+      clearInterval(x);
+      $(".resend-btn").hover(
+        function () {
+          $(this).css("color", "gray");
+        },
+        function () {
+          $(this).css("color", "black");
+        }
+      );
+      $(".resend-btn").prop("disabled", false);
+      document.getElementById("otp-timer").innerHTML = "0:00";
+    }
+  }, 1000);
+}
+
+async function checkUserSumbitorNot() {
+  $.LoadingOverlay("show", [{}]);
+  try{
+    let result = await fetch("/api/v1/getstatus")
+    let data = await result.json()
+    $.LoadingOverlay("hide", [{}]);
+    return data.user
+  }
+  catch(err) {
+    $.LoadingOverlay("hide", [{}]);
+    return false
+  }
+
+}
+
+function disableOtherForm(name, mobile) {
+  let buttons = document.getElementsByClassName('form-button')
+  let forms = document.getElementsByClassName('consult-form')
+  console.log(forms.length)
+  console.log(buttons.length)
+  for(btn of buttons){
+    btn.style.display = 'none'
+  }
+  try{
+    for(form of forms) {
+      console.log(form.elements)
+      const inputs = form.elements;
+      if(inputs && inputs['name']) inputs['name'].value = name
+      if(inputs && inputs['mobile'])  inputs['mobile'].value = mobile
+      
+    }
+  }
+  catch(err) {
+
+    console.log(err)
+    return
+  }
+  
+}
+
+function setGroupModal(inviteGroupLink) {
+   $("#groupInvite-modal-div").css("display", "none");
+    let link = document.getElementById("teleGroupLink");
+    const url = new URL(window.location.href);
+    console.log("SEarch params"+ url.pathname)
+    if(url.pathname.includes('ta')) inviteGroupLink = 'https://t.me/brototype_learning_club_tamil'
+    link.href = inviteGroupLink;
+    link.innerHTML = inviteGroupLink;
+    link.style.transition = "transition: all 2s linear";
+    $("#linkDiv").css("display", "block");
+}
+
+
+
+function languageSelectChange() {
+  var selectElement = document.getElementById("languageModalSelect");
+  var selectedLanguage = selectElement.value;
+  console.log(selectElement);
+console.log(selectedLanguage);
+  switch (selectedLanguage) {
+    case "Malayalam":
+      //  performMalayalamFunction();
+        $("#languageSelectModal").modal("hide");
+        break;
+    case "Hindi":
+        //performHindiFunction();
+        window.location.href = '/hi'
+        break;
+    case "Tamil":
+       // performTamilFunction();
+       window.location.href = '/ta'
+        break;
+    default:
+        // Default case if none of the above matches
+        $("#languageSelectModal").modal("hide");
+        break;
+}
+return
+}

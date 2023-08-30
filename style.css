@@ -1,0 +1,218 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: black;
+}
+header .hireus{
+    width: 100%;
+    height: 28px;
+    background-color: rgba(255, 0, 0, 0.884);
+    display: flex;
+    justify-content: center;
+}
+.hireus label{
+    margin-top: 7px;
+    font-weight: 700;
+    color: #fff;
+    font-size: 15px;
+    letter-spacing: 1px;
+}
+header{
+    background-color: aqua;
+    position: sticky;
+    top: 0;
+}
+.mainheader{
+    padding: 0 17px ;
+    display: flex;
+    justify-content: space-between;
+    background-color: black;
+    height: 44px;
+}
+.logo{
+    padding: 2px 0;
+}
+.logo img{
+    width: 140px;
+}
+.rightheader ul{
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+.rightheader ul li{
+   margin-left: 32px;
+   font-size: 16px;
+   color: #fff;
+}
+.rightheader ul .menu{
+   font-size: 25px;
+   color: #fff;
+}
+.rightheader{
+    margin-top: -11px;
+}
+.rightheader button{
+    border-radius: 25px;
+    width: 170px;
+    padding: 5px 0;
+    font-size: 20px;
+    font-weight: 600;
+    background-color: rgba(255, 0, 0, 0.756);
+    border: 0;
+}
+ img{
+    width: 1060px;
+    position: absolute;
+    
+}
+.container{
+    background-color: black;
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    box-sizing: border-box;
+}
+.minidiv{
+    background:transparent;
+    padding: 0 50px;
+    position: relative;
+    left: 550px;
+    width: 900px;
+  
+}
+.writings{
+    text-align: center;
+    z-index: 100;
+}
+.writings h3{
+    color: #fff;
+    font-size: 65px;
+    margin-bottom: 25px;
+}
+.writings h4{
+    margin-top: -10px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: 0;
+    font-weight: 400;
+    line-height: 30px;
+}
+.writings h2{
+    color: #fff;
+}
+.fourbuttons{
+    width: 100%;
+    padding: 20px 10px;
+    background: transparent;
+}
+.fourbuttonsfirst{
+    display: flex;
+}
+.fourbuttonssecond{
+    display: flex;
+}
+.buttonone button{
+    color: #fff;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    width: 380px;
+    height: 50px;
+    border-radius: 30px;
+    font-size: 17px;
+    font-weight: 400;
+    background: rgba(128, 128, 128, 0.297);
+    border-color: #ffffff1c;
+
+}
+.buttonone button input{
+    margin-left: -100px;
+}
+.bottomwriting{
+    text-align: center;
+    font-size: 17px;
+    font-weight: 500;
+    color: #fff;
+}
+.bottomwriting button{
+    width: 450px;
+    height: 50px;
+    border-radius: 30px;
+    font-size: 18px;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    font-weight: bold;
+    background-color: rgba(255, 0, 0, 0.825);
+    border: 0;
+    color: #fff;
+}
+.container2 {
+    background-color: black;
+    width: 100%;
+    height: 385px;
+    padding-top: 80px;
+    text-align: center;
+}
+.container2 label{
+    color: #fff;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 60px;
+}
+.container2 .redtext{
+    color: red;
+    font-weight: 600;
+}
+.beforeyoutube{
+    background-color: #fff;
+    text-align: center;
+    padding-top: 110px;
+}
+.beforeyoutube label{
+    margin-bottom: 100px;
+    font-size: 63px;
+    font-weight: 600;
+}.beforeyoutube .redtext{
+    color: red;
+}
+.youtube{
+    background-color: #fff;
+    padding: 90px 20px;
+}
+.youtube iframe{
+    width: 99%;
+    border-radius: 10px;
+    height: 700px;
+}
+.youtube button{
+    height: 60px;
+    width: 600px;
+    position: relative;
+    top: 50px;
+    left: 450px;
+    font-size: 25px;
+    letter-spacing: 1px;
+    background-color: rgba(255, 0, 0, 0.884);
+    color: #fff;
+    font-weight: 600;
+}
+.formcontainer{
+    background-color: rgb(237, 231, 231);
+    padding: 20px;
+    margin: 90px 130px;
+}
+.formcontainer .heading h3{
+    text-align: center;
+    color: #141313;
+    font-size: 45px;
+    letter-spacing: 1px;
+}
+.footer img{
+    width: 200px;
+    height: 50px;
+    margin-left: 1320px;
+}
